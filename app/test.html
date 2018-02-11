@@ -1,0 +1,60 @@
+<head>
+  <title>My A-Frame Scene</title>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+  <script src="https://rawgit.com/mayognaise/aframe-draw-shader/master/dist/aframe-draw-shader.min.js"></script>
+  <script>
+    /**
+     * noise component example
+     */
+    AFRAME.registerComponent('noise', {
+      dependencies: [ ],
+      schema: { },
+      init () {
+        this.el.addEventListener('draw-render', this.render.bind(this))
+      },
+      update () { },
+      remove () { },
+      pause () { },
+      play () { },
+      render (e) {
+        var ctx = e.detail.ctx,
+            texture = e.detail.texture,
+            w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            idata = ctx.createImageData(w, h),
+            buffer32 = new Uint32Array(idata.data.buffer),
+            len = buffer32.length,
+            i = 0
+        for(; i < len;)
+            buffer32[i++] = ((255 * Math.random())|0) << 24
+        ctx.putImageData(idata, 0, 0)
+        // texture upate
+        texture.needsUpdate = true
+      }
+    })
+  </script>
+</head>
+
+<body>
+  <a-scene>
+    <a-circle position="-3 1 -2" color="grey" radius="0.25" rotation="0 60 0">
+      <a-ring color="blue" radius-inner="0.3" radius-outer="0.35"></a-ring>
+    </a-circle>
+    <a-circle position="0 1 -4" color="grey" radius="0.25"></a-circle>
+    <a-circle position="3 1 -2" color="grey" radius="0.25" rotation="0 -60 0"></a-circle>
+
+    <a-cylinder position="0 1.6 0" height="0.01" color="blue" open-ended="true"
+      material="shader:flat; side:back"
+      radius="3"
+      rotation="-10 56 0"
+    >
+      <a-cylinder position="0 0 0" rotation="90 0 90" height="0.01" color="blue" open-ended="true"
+      radius="3"
+
+      material="shader:flat; side:back"
+      ></a-cylinder>
+
+    </a-cylinder>
+
+  </a-scene>
+</body>
